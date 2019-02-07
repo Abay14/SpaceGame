@@ -15,10 +15,10 @@ public class Ship extends SpaceBody {
 
     @Override
     public void update() { // перемещаем корабль в зависимости от нажатой кнопки
-        if(MainActivity.isLeftPressed && x >= 0){
+        if(GameActivity.isLeftPressed && x >= 0){
             x -= speed;
         }
-        if(MainActivity.isRightPressed && x <= GameView.maxX - 5){
+        if(GameActivity.isRightPressed && x <= GameView.maxX - 5){
             x += speed;
         }
     }
