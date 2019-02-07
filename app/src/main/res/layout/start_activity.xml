@@ -26,12 +26,12 @@
             android:text=" Space Game"
             android:textColor="@color/colorPrimary"
             android:textSize="50dp"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintBottom_toTopOf="@+id/about"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button3" />
+            app:layout_constraintTop_toBottomOf="@+id/exit" />
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#fff"
@@ -40,23 +40,23 @@
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button2" />
+            app:layout_constraintTop_toBottomOf="@+id/about" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:background="#fff"
-            android:text="Help"
+            android:text="About"
             android:textColor="#000"
             android:textSize="30dp"
-            app:layout_constraintBottom_toTopOf="@+id/button1"
+            app:layout_constraintBottom_toTopOf="@+id/start"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
