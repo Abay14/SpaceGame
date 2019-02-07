@@ -14,8 +14,6 @@ public class StartActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -40,8 +38,9 @@ public class StartActivity extends Activity implements OnClickListener {
             }break;
 
             //выход
-            case R.id.about: {
+            case R.id.exit: {
                 finish();
+                System.exit(0);
             }break;
 
             default:
