@@ -47,8 +47,8 @@ public class GameView extends SurfaceView implements Runnable{
         gameThread.start();
     }
 
-        @Override
-        public void run()
+    @Override
+    public void run()
     {
         while (gameRunning)
         {
@@ -73,12 +73,16 @@ public class GameView extends SurfaceView implements Runnable{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Log.d(TAG, "play again clicked");
+                            //clear asteroids
+                            asteroids.clear();
                         }
                     });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.return_to_main, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Log.d(TAG, "cancel clicked");
+                            //return to main activity
+                            ((Activity) getContext()).finish();
                         }
                     });
                     gameoverDialog = builder.create();
@@ -150,6 +154,4 @@ public class GameView extends SurfaceView implements Runnable{
             currentTime ++;
         }
     }
-
-
 }
