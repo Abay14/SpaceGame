@@ -3,15 +3,19 @@ package com.example.adygha.spacegame;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
 
 public class GameView extends SurfaceView implements Runnable{
+
+    private final String TAG="SPACE_GAME";
 
     private ArrayList<Asteroid> asteroids = new ArrayList<>(); // тут будут харанится астероиды
     private final int ASTEROID_INTERVAL = 50; // время через которое появляются астероиды (в итерациях)
@@ -55,13 +59,32 @@ public class GameView extends SurfaceView implements Runnable{
             control();
         }
 
+        firstTime=true;
+
         Activity activity = (Activity) getContext();
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(getContext());
-                popupBuilder.setMessage("GAME OVER!");
-                popupBuilder.show();
+                if(gameoverDialog==null)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("GAME OVER!");
+                    builder.setPositiveButton(R.string.play_again, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "play again clicked");
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "cancel clicked");
+                        }
+                    });
+                    gameoverDialog = builder.create();
+                }
+
+                gameoverDialog.show();
             }
         });
 
