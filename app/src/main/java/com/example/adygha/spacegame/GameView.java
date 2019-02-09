@@ -1,5 +1,7 @@
 package com.example.adygha.spacegame;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,6 +29,8 @@ public class GameView extends SurfaceView implements Runnable{
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
 
+    private AlertDialog gameoverDialog=null;
+
     public GameView(Context context) {
         super(context);
 
@@ -39,15 +43,28 @@ public class GameView extends SurfaceView implements Runnable{
         gameThread.start();
     }
 
-    @Override
-    public void run() {
-        while (gameRunning) {
+        @Override
+        public void run()
+    {
+        while (gameRunning)
+        {
             update();
             draw();
             checkCollision();
             checkIfNewAsteroid();
             control();
         }
+
+        Activity activity = (Activity) getContext();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder popupBuilder = new AlertDialog.Builder(getContext());
+                popupBuilder.setMessage("GAME OVER!");
+                popupBuilder.show();
+            }
+        });
+
     }
 
     private void update() {
@@ -71,14 +88,13 @@ public class GameView extends SurfaceView implements Runnable{
             }
 
             canvas = surfaceHolder.lockCanvas(); // закрываем canvas
-            canvas.drawColor(Color.BLACK); // заполняем фон чёрным
+            canvas.drawColor(Color.YELLOW); // заполняем фон чёрным
 
             ship.drow(paint, canvas); // рисуем корабль
 
             for(Asteroid asteroid: asteroids){ // рисуем астероиды
                 asteroid.drow(paint, canvas);
             }
-
 
             surfaceHolder.unlockCanvasAndPost(canvas); // открываем canvas
         }
