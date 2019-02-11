@@ -1,2 +1,2 @@
 # SpaceGame
-Trello board https://trello.com/b/udnjmgfD/space-game
+Trello board: https://trello.com/b/udnjmgfD/space-game
