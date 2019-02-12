@@ -2,5 +2,5 @@
     <string name="app_name">SpaceGame</string>
     <string name="game_over">GAME OVER!</string>
     <string name="play_again">Play again</string>
-    <string name="cancel">Cancel</string>
+    <string name="return_to_main">Return to main</string>
 </resources>
