@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -21,34 +22,50 @@ public class GameView extends SurfaceView implements Runnable{
     private final int ASTEROID_INTERVAL = 50; // время через которое появляются астероиды (в итерациях)
     private int currentTime = 0;
 
-    public static int maxX = 20; // размер по горизонтали
-    public static int maxY = 28; // размер по вертикали
+    public static int maxX = 30; // размер по горизонтали, также можно 20
+    public static int maxY = 50; // размер по вертикали, также можно 28
     public static float unitW = 0; // пикселей в юните по горизонтали
     public static float unitH = 0; // пикселей в юните по вертикали
     private boolean firstTime = true;
-    private boolean gameRunning = true;
+    private volatile boolean gameRunning = true;
+    private volatile boolean isEntered=false;
+    private volatile boolean replay=true;
     private Ship ship;
     private Thread gameThread = null;
     private Paint paint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
+    private ControlButtons controls;
+
+    private Context context;
 
     private AlertDialog gameoverDialog=null;
 
     public GameView(Context context) {
         super(context);
+        this.context=context;
 
         //инициализируем обьекты для рисования
         surfaceHolder = getHolder();
         paint = new Paint();
 
-        // инициализируем поток
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     @Override
     public void run()
+    {
+        do{
+            onGameCycle();
+            while(!isEntered){}
+            gameRunning=true;
+            isEntered=false;
+            asteroids.clear();
+        }while(replay);
+    }
+
+    private void onGameCycle()
     {
         while (gameRunning)
         {
@@ -58,10 +75,33 @@ public class GameView extends SurfaceView implements Runnable{
             checkIfNewAsteroid();
             control();
         }
+        showGameOverDialog();
+    }
 
-        firstTime=true;
 
-        Activity activity = (Activity) getContext();
+    @Override
+    public boolean onTouchEvent(MotionEvent motion)
+    {
+        switch (motion.getAction() & MotionEvent.ACTION_MASK)
+        {
+            case MotionEvent.ACTION_DOWN: {
+                Log.d(TAG, "Screen pressed: " + motion.getRawX() + ":" + motion.getRawY());
+
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+//                Log.d(TAG, "Screen released");
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    private void showGameOverDialog()
+    {
+        //показать game over
+        Activity activity = (Activity) context;
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -73,14 +113,16 @@ public class GameView extends SurfaceView implements Runnable{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Log.d(TAG, "play again clicked");
-                            //clear asteroids
-                            asteroids.clear();
+                            replay=true;
+                            isEntered=true;
                         }
                     });
                     builder.setNegativeButton(R.string.return_to_main, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Log.d(TAG, "cancel clicked");
+                            replay=false;
+                            isEntered=true;
                             //return to main activity
                             ((Activity) getContext()).finish();
                         }
@@ -91,7 +133,6 @@ public class GameView extends SurfaceView implements Runnable{
                 gameoverDialog.show();
             }
         });
-
     }
 
     private void update() {
@@ -111,25 +152,31 @@ public class GameView extends SurfaceView implements Runnable{
                 unitW = surfaceHolder.getSurfaceFrame().width()/maxX; // вычисляем число пикселей в юните
                 unitH = surfaceHolder.getSurfaceFrame().height()/maxY;
 
-                ship = new Ship(getContext()); // добавляем корабль
+                ship = new Ship(context); // добавляем корабль
+                controls=new ControlButtons(context); //создаем кнопки
             }
 
             canvas = surfaceHolder.lockCanvas(); // закрываем canvas
             canvas.drawColor(Color.YELLOW); // заполняем фон чёрным
 
             ship.drow(paint, canvas); // рисуем корабль
+            controls.drow(paint, canvas); //рисуем кнопки
 
             for(Asteroid asteroid: asteroids){ // рисуем астероиды
                 asteroid.drow(paint, canvas);
             }
 
+            //добавляем кнопки управления
+
             surfaceHolder.unlockCanvasAndPost(canvas); // открываем canvas
         }
     }
 
-    private void control() { // пауза на 17 миллисекунд
+    private void control() {
+        // 1000ms / 60fps = 17 ms;
+        // чтобы достичь 60 fps нужно выполнять отрисовку каждые 17 мс
         try {
-            gameThread.sleep(15);
+            gameThread.sleep(17);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -140,9 +187,9 @@ public class GameView extends SurfaceView implements Runnable{
             if(asteroid.isCollision(ship.x, ship.y, ship.size)){
                 // игрок проиграл
                 gameRunning = false; // останавливаем игру
+                }
                 // TODO добавить анимацию взрыва
             }
-        }
     }
 
     private void checkIfNewAsteroid(){ // каждые 50 итераций добавляем новый астероид
@@ -151,7 +198,7 @@ public class GameView extends SurfaceView implements Runnable{
             asteroids.add(asteroid);
             currentTime = 0;
         }else{
-            currentTime ++;
+            ++currentTime;
         }
     }
 }
