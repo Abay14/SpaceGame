@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
+
 
 public class ControlButtons {
     protected float x; // координаты
@@ -13,16 +13,20 @@ public class ControlButtons {
     protected float size;
     protected int bitmapId; //id картинки
     protected Bitmap bitmap; //управление
+    protected Paint alphaPaint; //особая прозрачная кисть
 
 
     public ControlButtons(Context context)
     {
         bitmapId=R.drawable.controls;
-        x=1;
-        y=22;
-        size=5;
+        x=3;
+        y=40;
+        size=6;
 
         init(context);
+
+        alphaPaint=new Paint();
+        alphaPaint.setAlpha(35);
     }
 
     void init(Context context) { // сжимаем картинку до нужных размеров
@@ -33,6 +37,6 @@ public class ControlButtons {
     }
 
     void drow(Paint paint, Canvas canvas){ // рисуем картинку
-        canvas.drawBitmap(bitmap, x*GameView.unitW, y*GameView.unitH, paint);
+        canvas.drawBitmap(bitmap, x*GameView.unitW, y*GameView.unitH, alphaPaint);
     }
 }
