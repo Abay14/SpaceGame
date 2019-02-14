@@ -85,7 +85,6 @@ public class GameView extends SurfaceView implements Runnable{
         switch (motion.getAction() & MotionEvent.ACTION_MASK)
         {
             case MotionEvent.ACTION_DOWN: {
-                Log.d(TAG, "Screen pressed: " + motion.getRawX() + ":" + motion.getRawY());
 
                 //координаты нажатий
                 float touchX = motion.getRawX();
@@ -95,37 +94,43 @@ public class GameView extends SurfaceView implements Runnable{
                 float horizPixelsOfOnePiece = controls.size / 3 * unitW;
                 float vertPixelsOfOnePiece = controls.size / 3 * unitW;
 
-                float buttonUpTopY = controls.y * unitH; //координата верхней границы кнопки ВВЕРХ по Y
-                float buttonUpBottomBorderY = buttonUpTopY + vertPixelsOfOnePiece; //координата нижней границы кнопки ВНИЗ по Y
+                float upTopY = controls.y * unitH; //координата верхней границы кнопки ВВЕРХ
+                float upBottomY = upTopY + vertPixelsOfOnePiece; //координата нижней границы кнопки ВНИЗ
 
-                float buttonDownTopY = buttonUpTopY + vertPixelsOfOnePiece * 2; //коорд верхней границы кнопки ВНИЗ по Y
-                float buttonDownBottomY = buttonDownTopY + vertPixelsOfOnePiece; //коорд нижней границы кнопки ВНИЗ по Y
+                float downTopY = upBottomY + vertPixelsOfOnePiece; //коорд верхней границы кнопки ВНИЗ
+                float downBottomY = downTopY + vertPixelsOfOnePiece; //коорд нижней границы кнопки ВНИЗ
 
-                Log.d(TAG, "UP AND BOTTOM COORDINATES: " + buttonUpTopY + " " + buttonUpBottomBorderY);
+                float leftLeftX = controls.x * unitW; //координата левой границы кнопки ВЛЕВО
+                float leftRightX = leftLeftX + horizPixelsOfOnePiece; //координата правой границы кнопки ВЛЕВО
 
-                if(touchY >= buttonUpTopY && touchY < buttonUpBottomBorderY) //кнопка вверх
+                float rightLeftX = leftRightX + horizPixelsOfOnePiece; //координата левой границы кнопки ВПРАВО
+                float rightRightX = rightLeftX + horizPixelsOfOnePiece; //координата правой границы кнопки ВПРАВО
+
+                if(touchY >= upTopY && touchY < upBottomY) //кнопка вверх
                 {
                     Log.d(TAG, "Command: UP!");
                 }
-                else if(touchY >= buttonDownTopY && touchY <= buttonDownBottomY) //кнопка вниз
+                else if(touchY >= downTopY && touchY <= downBottomY) //кнопка вниз
                 {
                     Log.d(TAG, "Command: BOTTOM!");
                 }
-                else if(false) //кнопка влево
+                else if(leftLeftX <= touchX && touchX <= leftRightX) //кнопка влево
                 {
                     Log.d(TAG, "Command: LEFT!");
                 }
-                else if(false) //кнопка вправо
+                else if(rightLeftX <= touchX && touchX <= rightRightX) //кнопка вправо
                 {
                     Log.d(TAG, "Command: RIGHT!");
                 }
 
-
                 break;
             }
             case MotionEvent.ACTION_UP: {
-
-//                Log.d(TAG, "Screen released");
+                //нажатие пользователя прекращено
+                GameActivity.isLeftPressed
+                        = GameActivity.isRightPressed
+                        = GameActivity.isUpPressed
+                        = GameActivity.isDownPressed = false;
                 break;
             }
         }
