@@ -106,19 +106,23 @@ public class GameView extends SurfaceView implements Runnable{
                 float rightLeftX = leftRightX + horizPixelsOfOnePiece; //координата левой границы кнопки ВПРАВО
                 float rightRightX = rightLeftX + horizPixelsOfOnePiece; //координата правой границы кнопки ВПРАВО
 
-                if(touchY >= upTopY && touchY < upBottomY) //кнопка вверх
+                if((upTopY <= touchY && touchY <= upBottomY)
+                        && (leftRightX <= touchX && touchX <= rightLeftX)) //кнопка вверх
                 {
                     Log.d(TAG, "Command: UP!");
                 }
-                else if(touchY >= downTopY && touchY <= downBottomY) //кнопка вниз
+                else if((downTopY <= touchY && touchY <= downBottomY)
+                        && (leftRightX <= touchX && touchX <= rightLeftX)) //кнопка вниз
                 {
-                    Log.d(TAG, "Command: BOTTOM!");
+                    Log.d(TAG, "Command: DOWN!");
                 }
-                else if(leftLeftX <= touchX && touchX <= leftRightX) //кнопка влево
+                else if((leftLeftX <= touchX && touchX <= leftRightX)
+                        && (upBottomY <= touchY && touchY <= downTopY)) //кнопка влево
                 {
                     Log.d(TAG, "Command: LEFT!");
                 }
-                else if(rightLeftX <= touchX && touchX <= rightRightX) //кнопка вправо
+                else if((rightLeftX <= touchX && touchX <= rightRightX)
+                        && (upBottomY <= touchY && touchY <= downTopY)) //кнопка вправо
                 {
                     Log.d(TAG, "Command: RIGHT!");
                 }
