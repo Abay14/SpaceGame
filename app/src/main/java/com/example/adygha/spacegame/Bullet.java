@@ -17,10 +17,4 @@ public class Bullet extends SpaceBody {
     public void update() {
         y -= speed;
     }
-
-    /*
-    public boolean isCollision(float bulletX, float bulletY, float bulletSize) {
-        return !(((x+size) < bulletX)||(x > (bulletX+bulletSize))||((y+size) < bulletY)||(y > (bulletY+bulletSize)));
-    }
-    */
 }

@@ -18,6 +18,8 @@ public class GameView extends SurfaceView implements Runnable{
 
     private final String TAG="SPACE_GAME";
 
+    private ArrayList<Bullet> bullets = new ArrayList<>(); //пули
+
     private ArrayList<Asteroid> asteroids = new ArrayList<>(); // тут будут харанится астероиды
     private final int ASTEROID_INTERVAL = 50; // время через которое появляются астероиды (в итерациях)
     private int currentTime = 0;
@@ -175,6 +177,9 @@ public class GameView extends SurfaceView implements Runnable{
             for (Asteroid asteroid : asteroids) {
                 asteroid.update();
             }
+
+            for(Bullet bullet : bullets)
+                bullet.update();
         }
     }
 
@@ -200,6 +205,9 @@ public class GameView extends SurfaceView implements Runnable{
                 asteroid.drow(paint, canvas);
             }
 
+            for(Bullet b : bullets)
+                b.drow(paint, canvas);
+
             //добавляем кнопки управления
             surfaceHolder.unlockCanvasAndPost(canvas); // открываем canvas
         }
@@ -218,17 +226,48 @@ public class GameView extends SurfaceView implements Runnable{
     private void checkCollision(){ // перебираем все астероиды и проверяем не касается ли один из них корабля
         for (Asteroid asteroid : asteroids) {
             if(asteroid.isCollision(ship.x, ship.y, ship.size)){
-                // игрок проиграл
-                gameRunning = false; // останавливаем игру
+                gameRunning = false; // игрок проиграл, останавливаем игру
+                return;
                 }
                 // TODO добавить анимацию взрыва
             }
+
+
+        //получаем размер массивов
+        int asteroidsArraySize = asteroids.size();
+        int bulletsArraySize = bullets.size();
+
+        //проверяем столкновение астероидов с пулями
+        for(int i=0; i<asteroidsArraySize;) {
+            for (int j = 0; j < bulletsArraySize; ) {
+                if (asteroids.get(i).isCollision(bullets.get(j).x, bullets.get(j).y, bullets.get(j).size)) {
+                    //при столкновении, удаляем и астероид, и пулю
+                    asteroids.remove(i);
+                    bullets.remove(j);
+
+                    //после удаления уменьшяем размер массивов на 1
+                    asteroidsArraySize = asteroidsArraySize - 1;
+                    bulletsArraySize = bulletsArraySize - 1;
+
+                    break; //переходим к следующему астероиду
+                } else {
+                    //если эта пуля не столкнулась с астероидом,
+                    // переходим для проверки к следующей пуле
+                    j = j + 1;
+                }
+            }
+            i = i + 1;
+        }
     }
 
     private void checkIfNewAsteroid(){ // каждые 50 итераций добавляем новый астероид
         if(currentTime >= ASTEROID_INTERVAL){
             Asteroid asteroid = new Asteroid(getContext());
             asteroids.add(asteroid);
+
+            Bullet bullet = new Bullet(context, ship.x, ship.y);
+            bullets.add(bullet);
+
             currentTime = 0;
         }else{
             ++currentTime;
