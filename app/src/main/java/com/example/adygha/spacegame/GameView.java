@@ -138,7 +138,7 @@ public class GameView extends SurfaceView implements Runnable{
                 if(gameoverDialog==null)
                 {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage("GAME OVER!");
+                    builder.setMessage("GAME OVER!").setCancelable(false);
                     builder.setPositiveButton(R.string.play_again, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
