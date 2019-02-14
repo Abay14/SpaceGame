@@ -25,35 +25,35 @@ public class GameActivity extends Activity implements View.OnTouchListener {
 
         setContentView(R.layout.game_activity);
 
-
         GameView gameView = new GameView(this); // создаём gameView
-
 
         LinearLayout gameLayout = (LinearLayout) findViewById(R.id.gameLayout); // находим gameLayout
         gameLayout.addView(gameView); // и добавляем в него gameView
 
-        Button leftButton = (Button) findViewById(R.id.leftButton); // находим кнопки
-        Button rightButton = (Button) findViewById(R.id.rightButton);
+//        Button leftButton = (Button) findViewById(R.id.leftButton); // находим кнопки
+//        Button rightButton = (Button) findViewById(R.id.rightButton);
 
-        leftButton.setOnTouchListener(this); // и добавляем этот класс как слушателя (при нажатии сработает onTouch)
-        rightButton.setOnTouchListener(this);
+//        leftButton.setOnTouchListener(this); //и добавляем этот класс как слушателя (при нажатии сработает onTouch)
+//        rightButton.setOnTouchListener(this);
     }
 
     @Override
     public boolean onTouch(View button, MotionEvent motion) {
         Log.d(TAG, "Button clicked");
         switch(button.getId()) { // определяем какая кнопка
-            case R.id.leftButton:
+//            case R.id.leftButton:
+            case 0:
                 switch (motion.getAction()) { // определяем нажата или отпущена
                     case MotionEvent.ACTION_DOWN:
                         isLeftPressed = true;
                         break;
                     case MotionEvent.ACTION_UP:
-                        isLeftPressed = false;
+                        isLeftPressed = isRightPressed = isUpPressed = isDownPressed = false;
                         break;
                 }
                 break;
-            case R.id.rightButton:
+//            case R.id.rightButton:
+            case 1:
                 switch (motion.getAction()) { // определяем нажата или отпущена
                     case MotionEvent.ACTION_DOWN:
                         isRightPressed = true;
@@ -69,4 +69,6 @@ public class GameActivity extends Activity implements View.OnTouchListener {
 
     public static boolean isLeftPressed = false; // нажата левая кнопка
     public static boolean isRightPressed = false; // нажата правая кнопка
+    public static boolean isUpPressed = false; // нажата кнопка вверх
+    public static boolean isDownPressed = false; // нажата кнопка вниз
 }

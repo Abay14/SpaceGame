@@ -86,10 +86,15 @@ public class GameView extends SurfaceView implements Runnable{
         {
             case MotionEvent.ACTION_DOWN: {
                 Log.d(TAG, "Screen pressed: " + motion.getRawX() + ":" + motion.getRawY());
+                //координаты нажатий
+                int x = (int) motion.getRawX();
+                int y = (int) motion.getRawY();
+
 
                 break;
             }
             case MotionEvent.ACTION_UP: {
+
 //                Log.d(TAG, "Screen released");
                 break;
             }
@@ -167,7 +172,6 @@ public class GameView extends SurfaceView implements Runnable{
             }
 
             //добавляем кнопки управления
-
             surfaceHolder.unlockCanvasAndPost(canvas); // открываем canvas
         }
     }
