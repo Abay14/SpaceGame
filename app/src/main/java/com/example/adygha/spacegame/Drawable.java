@@ -23,6 +23,10 @@ public class Drawable {
     void drow(Paint paint, Canvas canvas){ // рисуем картинку
         canvas.drawBitmap(bitmap, x*GameView.unitW, y*GameView.unitH, paint);
     }
+
+    float getX(){return x;}
+
+    float getY(){return y;}
 }
 
 
