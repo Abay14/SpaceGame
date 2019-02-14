@@ -19,7 +19,7 @@ public class GameView extends SurfaceView implements Runnable{
     private final String TAG="SPACE_GAME";
 
     private ArrayList<Asteroid> asteroids = new ArrayList<>(); // тут будут харанится астероиды
-    private final int ASTEROID_INTERVAL = 50; // время через которое появляются астероиды (в итерациях)
+    private final int ASTEROID_INTERVAL = 1000000000; // время через которое появляются астероиды (в итерациях)
     private int currentTime = 0;
 
     public static int maxX = 30; // размер по горизонтали, также можно 20
@@ -86,9 +86,39 @@ public class GameView extends SurfaceView implements Runnable{
         {
             case MotionEvent.ACTION_DOWN: {
                 Log.d(TAG, "Screen pressed: " + motion.getRawX() + ":" + motion.getRawY());
+
                 //координаты нажатий
-                int x = (int) motion.getRawX();
-                int y = (int) motion.getRawY();
+                float touchX = motion.getRawX();
+                float touchY = motion.getRawY();
+
+                //выделяем координаты кнопок на общей кнопке управления
+                float horizPixelsOfOnePiece = controls.size / 3 * unitW;
+                float vertPixelsOfOnePiece = controls.size / 3 * unitW;
+
+                float buttonUpTopY = controls.y * unitH; //координата верхней границы кнопки ВВЕРХ по Y
+                float buttonUpBottomBorderY = buttonUpTopY + vertPixelsOfOnePiece; //координата нижней границы кнопки ВНИЗ по Y
+
+                float buttonDownTopY = buttonUpTopY + vertPixelsOfOnePiece * 2; //коорд верхней границы кнопки ВНИЗ по Y
+                float buttonDownBottomY = buttonDownTopY + vertPixelsOfOnePiece; //коорд нижней границы кнопки ВНИЗ по Y
+
+                Log.d(TAG, "UP AND BOTTOM COORDINATES: " + buttonUpTopY + " " + buttonUpBottomBorderY);
+
+                if(touchY >= buttonUpTopY && touchY < buttonUpBottomBorderY) //кнопка вверх
+                {
+                    Log.d(TAG, "Command: UP!");
+                }
+                else if(touchY >= buttonDownTopY && touchY <= buttonDownBottomY) //кнопка вниз
+                {
+                    Log.d(TAG, "Command: BOTTOM!");
+                }
+                else if(false) //кнопка влево
+                {
+                    Log.d(TAG, "Command: LEFT!");
+                }
+                else if(false) //кнопка вправо
+                {
+                    Log.d(TAG, "Command: RIGHT!");
+                }
 
 
                 break;
