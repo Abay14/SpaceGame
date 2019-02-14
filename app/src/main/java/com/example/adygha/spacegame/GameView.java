@@ -19,7 +19,7 @@ public class GameView extends SurfaceView implements Runnable{
     private final String TAG="SPACE_GAME";
 
     private ArrayList<Asteroid> asteroids = new ArrayList<>(); // тут будут харанится астероиды
-    private final int ASTEROID_INTERVAL = 1000000000; // время через которое появляются астероиды (в итерациях)
+    private final int ASTEROID_INTERVAL = 50; // время через которое появляются астероиды (в итерациях)
     private int currentTime = 0;
 
     public static int maxX = 30; // размер по горизонтали, также можно 20
@@ -94,22 +94,22 @@ public class GameView extends SurfaceView implements Runnable{
                 {
                     if(controls.upTopY <= touchY && touchY <= controls.upBottomY) //кнопка вверх
                     {
-                        Log.d(TAG, "Command: UP!");
+                        GameActivity.isUpPressed = true;
                     }
                     else if(controls.downTopY <= touchY && touchY <= controls.downBottomY) //кнопка вниз
                     {
-                        Log.d(TAG, "Command: DOWN!");
+                        GameActivity.isDownPressed = true;
                     }
                 }
                 else if(controls.upBottomY < touchY && touchY < controls.downTopY)
                 {
                     if(controls.leftLeftX <= touchX && touchX <= controls.leftRightX) //левая кнопка
                     {
-                        Log.d(TAG, "Command: LEFT!");
+                        GameActivity.isLeftPressed = true;
                     }
                     else if(controls.rightLeftX <= touchX && touchX <= controls.rightRightX) //правая кнопка
                     {
-                        Log.d(TAG, "Command: RIGHT!");
+                        GameActivity.isRightPressed = true;
                     }
                 }
 
