@@ -9,9 +9,11 @@ public class Asteroid extends SpaceBody {
         Random random = new Random();
 
         bitmapId = R.drawable.asteroid;
+        size = 2;
         y=0;
-        x = random.nextInt(GameView.maxX) - radius;
-        size = radius*2;
+        x = random.nextInt(GameView.maxX);
+        x = x < GameView.maxX - size ? x : x - size ;
+
         speed = minSpeed + (maxSpeed - minSpeed) * random.nextFloat();
 
         init(context);
@@ -26,7 +28,6 @@ public class Asteroid extends SpaceBody {
         return !(((x+size) < shipX)||(x > (shipX+shipSize))||((y+size) < shipY)||(y > (shipY+shipSize)));
     }
 
-    private int radius = 2; // радиус
-    private float minSpeed = (float) 0.1; // минимальная скорость
-    private float maxSpeed = (float) 0.5; // максимальная скорость
+    private float minSpeed = 0.1f; // минимальная скорость
+    private float maxSpeed = 0.5f; // максимальная скорость
 }

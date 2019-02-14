@@ -6,14 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public class ControlButtons {
-    protected float x; // координаты
-    protected float y;
-    protected float size;
-    protected int bitmapId; //id картинки
-    protected Bitmap bitmap; //управление
-    protected Paint alphaPaint; //особая прозрачная кисть
-
+public class ControlButtons extends Drawable{
     float upTopY; //координата верхней границы кнопки ВВЕРХ
     float upBottomY; //координата нижней границы кнопки ВНИЗ
 
@@ -35,21 +28,7 @@ public class ControlButtons {
 
         init(context);
 
-        alphaPaint=new Paint();
-        alphaPaint.setAlpha(35);
-
         computeButtonCoordinates();
-    }
-
-    void init(Context context) { // сжимаем картинку до нужных размеров
-        Bitmap cBitmap = BitmapFactory.decodeResource(context.getResources(), bitmapId);
-        bitmap = Bitmap.createScaledBitmap(
-                cBitmap, (int)(size * GameView.unitW), (int)(size * GameView.unitH), false);
-        cBitmap.recycle();
-    }
-
-    void drow(Paint paint, Canvas canvas){ // рисуем картинку
-        canvas.drawBitmap(bitmap, x*GameView.unitW, y*GameView.unitH, alphaPaint);
     }
 
     void computeButtonCoordinates()

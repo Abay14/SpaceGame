@@ -33,6 +33,7 @@ public class GameView extends SurfaceView implements Runnable{
     private Ship ship;
     private Thread gameThread = null;
     private Paint paint;
+    private Paint alphaPaint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
     private ControlButtons controls;
@@ -47,7 +48,10 @@ public class GameView extends SurfaceView implements Runnable{
 
         //инициализируем обьекты для рисования
         surfaceHolder = getHolder();
+
         paint = new Paint();
+        alphaPaint = new Paint();
+        alphaPaint.setAlpha(35);
 
         gameThread = new Thread(this);
         gameThread.start();
@@ -190,7 +194,7 @@ public class GameView extends SurfaceView implements Runnable{
             canvas.drawColor(Color.YELLOW); // заполняем фон чёрным
 
             ship.drow(paint, canvas); // рисуем корабль
-            controls.drow(paint, canvas); //рисуем кнопки
+            controls.drow(alphaPaint, canvas); //рисуем кнопки
 
             for(Asteroid asteroid: asteroids){ // рисуем астероиды
                 asteroid.drow(paint, canvas);
