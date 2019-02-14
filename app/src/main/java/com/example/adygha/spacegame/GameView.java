@@ -90,41 +90,27 @@ public class GameView extends SurfaceView implements Runnable{
                 float touchX = motion.getRawX();
                 float touchY = motion.getRawY();
 
-                //выделяем координаты кнопок на общей кнопке управления
-                float horizPixelsOfOnePiece = controls.size / 3 * unitW;
-                float vertPixelsOfOnePiece = controls.size / 3 * unitW;
-
-                float upTopY = controls.y * unitH; //координата верхней границы кнопки ВВЕРХ
-                float upBottomY = upTopY + vertPixelsOfOnePiece; //координата нижней границы кнопки ВНИЗ
-
-                float downTopY = upBottomY + vertPixelsOfOnePiece; //коорд верхней границы кнопки ВНИЗ
-                float downBottomY = downTopY + vertPixelsOfOnePiece; //коорд нижней границы кнопки ВНИЗ
-
-                float leftLeftX = controls.x * unitW; //координата левой границы кнопки ВЛЕВО
-                float leftRightX = leftLeftX + horizPixelsOfOnePiece; //координата правой границы кнопки ВЛЕВО
-
-                float rightLeftX = leftRightX + horizPixelsOfOnePiece; //координата левой границы кнопки ВПРАВО
-                float rightRightX = rightLeftX + horizPixelsOfOnePiece; //координата правой границы кнопки ВПРАВО
-
-                if((upTopY <= touchY && touchY <= upBottomY)
-                        && (leftRightX <= touchX && touchX <= rightLeftX)) //кнопка вверх
+                if(controls.leftRightX < touchX && touchX < controls.rightLeftX)
                 {
-                    Log.d(TAG, "Command: UP!");
+                    if(controls.upTopY <= touchY && touchY <= controls.upBottomY) //кнопка вверх
+                    {
+                        Log.d(TAG, "Command: UP!");
+                    }
+                    else if(controls.downTopY <= touchY && touchY <= controls.downBottomY) //кнопка вниз
+                    {
+                        Log.d(TAG, "Command: DOWN!");
+                    }
                 }
-                else if((downTopY <= touchY && touchY <= downBottomY)
-                        && (leftRightX <= touchX && touchX <= rightLeftX)) //кнопка вниз
+                else if(controls.upBottomY < touchY && touchY < controls.downTopY)
                 {
-                    Log.d(TAG, "Command: DOWN!");
-                }
-                else if((leftLeftX <= touchX && touchX <= leftRightX)
-                        && (upBottomY <= touchY && touchY <= downTopY)) //кнопка влево
-                {
-                    Log.d(TAG, "Command: LEFT!");
-                }
-                else if((rightLeftX <= touchX && touchX <= rightRightX)
-                        && (upBottomY <= touchY && touchY <= downTopY)) //кнопка вправо
-                {
-                    Log.d(TAG, "Command: RIGHT!");
+                    if(controls.leftLeftX <= touchX && touchX <= controls.leftRightX) //левая кнопка
+                    {
+                        Log.d(TAG, "Command: LEFT!");
+                    }
+                    else if(controls.rightLeftX <= touchX && touchX <= controls.rightRightX) //правая кнопка
+                    {
+                        Log.d(TAG, "Command: RIGHT!");
+                    }
                 }
 
                 break;
