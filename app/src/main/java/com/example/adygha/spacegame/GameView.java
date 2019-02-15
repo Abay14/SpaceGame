@@ -76,6 +76,8 @@ public class GameView extends SurfaceView implements Runnable{
         while (gameRunning)
         {
             update();
+            removeHiddenBodies(asteroids);
+            removeHiddenBodies(bullets);
             draw();
             checkCollision();
             checkIfNewAsteroid();
@@ -271,6 +273,24 @@ public class GameView extends SurfaceView implements Runnable{
             currentTime = 0;
         }else{
             ++currentTime;
+        }
+    }
+
+
+    private <T> void removeHiddenBodies(ArrayList<T> list)
+    {
+        for(int i=0; i<list.size(); )
+        {
+            SpaceBody iter = (SpaceBody)list.get(i);
+            if(iter.y < 0 || GameView.maxY < iter.y) //астероид вышел за видимые границы
+            {
+                Log.d(TAG, "An object deleted");
+                list.remove(i);
+            }
+            else
+            {
+                ++i;
+            }
         }
     }
 }
