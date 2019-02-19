@@ -24,6 +24,9 @@ public class GameView extends SurfaceView implements Runnable{
     private final int ASTEROID_INTERVAL = 50; // время через которое появляются астероиды (в итерациях)
     private int currentTime = 0;
 
+    private int LEVEL_INTERVAL  = 3000; // время через которое скорость падения астероидов увеличиваются.
+    private int elapsedTime = 0;
+
     public static int maxX = 30; // размер по горизонтали, также можно 20
     public static int maxY = 50; // размер по вертикали, также можно 28
     public static float unitW = 0; // пикселей в юните по горизонтали
@@ -81,6 +84,7 @@ public class GameView extends SurfaceView implements Runnable{
             draw();
             checkCollision();
             checkIfNewAsteroid();
+            checkIfLevelUp();
             control();
         }
         showGameOverDialog();
@@ -276,6 +280,14 @@ public class GameView extends SurfaceView implements Runnable{
         }
     }
 
+    private void checkIfLevelUp(){
+       if(elapsedTime >= LEVEL_INTERVAL ){
+            Asteroid.increaseSpeed(0.2f);
+            elapsedTime = 0;
+        }else{
+            ++elapsedTime;
+        }
+    }
 
     private <T> void removeHiddenBodies(ArrayList<T> list)
     {

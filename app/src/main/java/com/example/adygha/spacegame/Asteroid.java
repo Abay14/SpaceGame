@@ -35,5 +35,5 @@ public class Asteroid extends SpaceBody {
     }
 
     private static float minSpeed = 0.1f; // минимальная скорость
-    private static float maxSpeed = 0.5f; // максимальная скорость
+    private static float maxSpeed = 0.3f; // максимальная скорость
 }
