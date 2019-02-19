@@ -25,9 +25,15 @@ public class Asteroid extends SpaceBody {
     }
 
     public boolean isCollision(float shipX, float shipY, float shipSize) {
-        return !(((x+size) < shipX)||(x > (shipX+shipSize))||((y+size) < shipY)||(y > (shipY+shipSize)));
+        return !(((x+size) < shipX) || (x > (shipX+shipSize)) || ((y+size) < shipY) || (y > (shipY+shipSize)));
     }
 
-    private float minSpeed = 0.1f; // минимальная скорость
-    private float maxSpeed = 0.5f; // максимальная скорость
+    public static void increaseSpeed(float value)
+    {
+        minSpeed += value;
+        maxSpeed += value;
+    }
+
+    private static float minSpeed = 0.1f; // минимальная скорость
+    private static float maxSpeed = 0.5f; // максимальная скорость
 }
