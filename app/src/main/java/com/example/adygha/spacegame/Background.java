@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
-public class ParallaxBackground {
+public class Background {
     Bitmap bitmap;
     Bitmap bitmapReversed;
 
@@ -14,13 +14,13 @@ public class ParallaxBackground {
     boolean reversedFirst;
     float speed;
 
-    int xClip;
-    int startY;
-    int endY;
+    int yClip;
+//    int startY;
+//    int endY;
 
-    ParallaxBackground(Context context, int screenWidth, int screenHeight, String bitmapName, int sY, int eY, float s){
+    Background(Context context, int screenWidth, int screenHeight){
          // Make a resource id out of the string of the file name
-         int resID = context.getResources().getIdentifier(bitmapName,
+         int resID = context.getResources().getIdentifier("background",
             "drawable", context.getPackageName());
 
          // Load the bitmap using the id
@@ -34,31 +34,39 @@ public class ParallaxBackground {
 
         // Where to clip the bitmaps
         // Starting at the first pixel
-        xClip = 0;
+        yClip = 0;
 
         //Position the background vertically
-        startY = sY * (screenHeight / 100);
-        endY = eY * (screenHeight / 100);
-        speed = s;
+//        startY = sY * (screenHeight / 100);
+//        endY = eY * (screenHeight / 100);
+        speed = 1;
+
+        width = screenWidth;
+        height = screenHeight;
 
         // Create the bitmap
-        bitmap = Bitmap.createScaledBitmap(bitmap, screenWidth,
-                (endY - startY)
-                , true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, screenWidth, screenHeight,true);
 
         // Save the width and height for later use
-        width = bitmap.getWidth();
-        height = bitmap.getHeight();
+
 
         //Create a mirror image of the background (horizontal flip)
         Matrix matrix = new Matrix();
         matrix.setScale(-1, 1);
         bitmapReversed = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-    
 
 }
 
-    public void update(long fps){
-
+    public void update()
+    {
+        // Move the clipping position and reverse if necessary
+        yClip += speed;
+        if (yClip >= width) {
+            yClip = 0;
+            reversedFirst = !reversedFirst;
+        }/* else if (xClip < 0) {
+            xClip = width;
+            reversedFirst = !reversedFirst;
+        }*/
     }
 }
