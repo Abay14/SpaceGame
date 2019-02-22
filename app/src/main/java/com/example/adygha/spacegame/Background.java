@@ -61,7 +61,7 @@ public class Background {
     {
         // Move the clipping position and reverse if necessary
         yClip += speed;
-        if (yClip >= width) {
+        if (yClip >= height) {
             yClip = 0;
             reversedFirst = !reversedFirst;
         }/* else if (xClip < 0) {

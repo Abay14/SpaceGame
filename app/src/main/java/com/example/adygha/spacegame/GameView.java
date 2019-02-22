@@ -249,7 +249,7 @@ public class GameView extends SurfaceView implements Runnable{
         // what coordinates of screen to draw them at
 
         // For the regular bitmap
-        Rect from1 = new Rect(0, 0, bg.width, bg.width - bg.yClip);
+        Rect from1 = new Rect(0, 0, bg.width, bg.height - bg.yClip);
         Rect to1 = new Rect(0, bg.yClip, bg.width, bg.height);
 
         // For the reversed background
@@ -258,11 +258,11 @@ public class GameView extends SurfaceView implements Runnable{
 
         //draw the two background bitmaps
         if (!bg.reversedFirst) {
-            canvas.drawBitmap(bg.bitmapReversed, from1, to1, paint);
             canvas.drawBitmap(bg.bitmap, from2, to2, paint);
+            canvas.drawBitmap(bg.bitmapReversed, from1, to1, paint);
         } else {
-            canvas.drawBitmap(bg.bitmapReversed, from2, to2, paint);
             canvas.drawBitmap(bg.bitmap, from1, to1, paint);
+            canvas.drawBitmap(bg.bitmapReversed, from2, to2, paint);
         }
 
     }
