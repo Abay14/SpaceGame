@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -42,6 +45,9 @@ public class GameView extends SurfaceView implements Runnable{
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
     private ControlButtons controls;
+    private Background background;
+
+
 
     private Context context;
 
@@ -57,6 +63,16 @@ public class GameView extends SurfaceView implements Runnable{
         paint = new Paint();
         alphaPaint = new Paint();
         alphaPaint.setAlpha(35);
+
+
+//        Bitmap cBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+//        background = Bitmap.createScaledBitmap(
+//                cBitmap, 1080, 1920, false);
+//        cBitmap.recycle();
+
+//        background = Bitmap.createScaledBitmap(
+//                cBitmap, (int)(size * GameView.unitW), (int)(size * GameView.unitH), false);
+//        cBitmap.recycle();
 
         gameThread = new Thread(this);
         gameThread.start();
@@ -186,6 +202,8 @@ public class GameView extends SurfaceView implements Runnable{
 
             for(Bullet bullet : bullets)
                 bullet.update();
+
+            background.update();
         }
     }
 
@@ -199,13 +217,20 @@ public class GameView extends SurfaceView implements Runnable{
 
                 ship = new Ship(context); // добавляем корабль
                 controls=new ControlButtons(context); //создаем кнопки
+
+                background = new Background(context, surfaceHolder.getSurfaceFrame().width(),
+                        surfaceHolder.getSurfaceFrame().height());
             }
 
             canvas = surfaceHolder.lockCanvas(); // закрываем canvas
-            canvas.drawColor(Color.YELLOW); // заполняем фон чёрным
+//            canvas.drawColor(Color.YELLOW); // заполняем фон чёрным
+
+//            canvas.drawBitmap(background., 0f, 0f, paint);
+
+            drawBackground();
 
             ship.drow(paint, canvas); // рисуем корабль
-            controls.drow(alphaPaint, canvas); //рисуем кнопки
+            controls.drow(paint, canvas); //рисуем кнопки
 
             for(Asteroid asteroid: asteroids){ // рисуем астероиды
                 asteroid.drow(paint, canvas);
@@ -218,6 +243,34 @@ public class GameView extends SurfaceView implements Runnable{
             surfaceHolder.unlockCanvasAndPost(canvas); // открываем canvas
         }
     }
+
+    private void drawBackground() {
+
+        // Make a copy of the relevant background
+        Background bg = background;
+
+        // define what portion of images to capture and
+        // what coordinates of screen to draw them at
+
+        // For the regular bitmap
+        Rect from1 = new Rect(0, 0, bg.width, bg.height - bg.yClip);
+        Rect to1 = new Rect(0, bg.yClip, bg.width, bg.height);
+
+        // For the reversed background
+        Rect from2 = new Rect(0, bg.height - bg.yClip, bg.width, bg.height);
+        Rect to2 = new Rect(0, 0, bg.width, bg.yClip);
+
+        //draw the two background bitmaps
+        if (!bg.reversedFirst) {
+            canvas.drawBitmap(bg.bitmap, from2, to2, paint);
+            canvas.drawBitmap(bg.bitmapReversed, from1, to1, paint);
+        } else {
+            canvas.drawBitmap(bg.bitmap, from1, to1, paint);
+            canvas.drawBitmap(bg.bitmapReversed, from2, to2, paint);
+        }
+
+    }
+
 
     private void control() {
         // 1000ms / 60fps = 17 ms;
