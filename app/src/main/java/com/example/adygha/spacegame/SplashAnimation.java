@@ -1,5 +1,6 @@
 package com.example.adygha.spacegame;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,14 @@ public class SplashAnimation extends AppCompatActivity {
         checkAnimationStatus(50, animationDrawable);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+
+        Intent intent = new Intent();
+        intent.setClass(this, StartActivity.class);
+        startActivity(intent);
+    }
 
     private void checkAnimationStatus(final int time, final AnimationDrawable animationDrawable) {
         Handler handler = new Handler();
